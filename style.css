@@ -28,3 +28,7 @@ p{text-wrap:pretty}
 @media(max-width:680px){.dashboard{grid-template-columns:minmax(0,1fr)}h1{letter-spacing:-1.5px}.intro p{font-size:16px}.gaugecard .selector{max-width:none}.notice span{text-wrap:pretty}}
 
 .intro{max-width:none}h1{max-width:none;font-size:clamp(36px,4.2vw,56px);letter-spacing:-1.8px}
+
+.loadlegend{flex-wrap:wrap;gap:12px 22px}.dailyrow{width:max-content;min-width:100%;border-top:1px solid var(--line);padding-top:14px}.dailyrow h3{position:sticky;left:0;width:fit-content;max-width:85vw;background:white;margin:0 0 8px;font-size:14px}.dailyrow svg{display:block}.dailyrow circle{cursor:help}#dailyTable{max-height:420px}.history .selector{min-width:175px}
+
+.dailyrow .dailyaxis{position:sticky;left:0;margin-top:-165px;background:white;pointer-events:none}
