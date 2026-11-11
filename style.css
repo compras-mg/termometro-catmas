@@ -75,3 +75,5 @@ article.gaugecard{padding:20px 16px;display:flex;flex-direction:column;min-width
 
 /* Navigation accommodates monitoring on narrow screens. */
 header{flex-wrap:wrap;gap:16px}nav{flex-wrap:wrap}
+
+.performance-summary{display:grid;grid-template-columns:2fr 1fr;gap:28px;align-items:center;margin:24px 0 32px;padding:24px;background:#eaf0e4;border:1px solid var(--line);border-radius:12px}.performance-summary h2{font-size:20px;margin:8px 0}.performance-number{font-size:26px;font-weight:600;line-height:1.4;margin:10px 0}.performance-summary a{font-weight:600}.performance-summary .small{line-height:1.6}@media(max-width:760px){.performance-summary{grid-template-columns:1fr;gap:12px;padding:20px}.performance-number{font-size:22px}}
