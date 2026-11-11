@@ -20,3 +20,11 @@ thead th{color:#344e5c}.dot{background:#344e5c}.notice{background:#fff8e8}
 .single-view .gaugecard{padding:24px 32px}.single-view .gaugecard .cardhead{min-height:0;display:flex;align-items:center}
 .single-view .gaugewrap{max-width:390px}.single-view .gaugevalue strong{font-size:52px}.single-view .load-description{min-height:0}
 @media(max-width:600px){.view-controls{align-items:stretch;gap:14px}.view-switch{width:100%}.view-switch button{flex:1;padding:12px 10px;font-size:13px}#kindChoice{width:100%;min-width:0}.single-view .gaugecard{padding:20px}.single-view .gaugecard .cardhead{display:block}}
+
+.schedule-note{display:block;margin-top:5px}
+.view-controls{justify-content:space-between;align-items:center}
+.show-all-control{display:inline-flex;align-items:center;gap:9px;color:var(--muted);font-size:13px;font-weight:400;cursor:pointer}
+.show-all-control input{appearance:none;width:32px;min-height:18px;height:18px;border:1px solid #949494;border-radius:12px;background:#d8dde0;padding:0;margin:0;position:relative;cursor:pointer}
+.show-all-control input::after{content:'';position:absolute;width:12px;height:12px;top:2px;left:2px;background:#fff;border-radius:50%;box-shadow:0 1px 2px #0003}
+.show-all-control input:checked{background:#be1e2d;border-color:#be1e2d}.show-all-control input:checked::after{left:16px}
+@media(max-width:600px){.view-controls{align-items:flex-end}.show-all-control{margin-left:auto}}
