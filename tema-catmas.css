@@ -28,3 +28,13 @@ thead th{color:#344e5c}.dot{background:#344e5c}.notice{background:#fff8e8}
 .show-all-control input::after{content:'';position:absolute;width:12px;height:12px;top:2px;left:2px;background:#fff;border-radius:50%;box-shadow:0 1px 2px #0003}
 .show-all-control input:checked{background:#be1e2d;border-color:#be1e2d}.show-all-control input:checked::after{left:16px}
 @media(max-width:600px){.view-controls{align-items:flex-end}.show-all-control{margin-left:auto}}
+
+/* Resumo ao lado do termômetro individual; abaixo na visão de todos. */
+@media(min-width:1000px){
+ main:has(#gaugeDashboard.single-view){display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);column-gap:28px}
+ main:has(#gaugeDashboard.single-view)>*{grid-column:1/-1;min-width:0}
+ main:has(#gaugeDashboard.single-view)>.indicators{grid-column:1}
+ main:has(#gaugeDashboard.single-view)>.performance-summary{grid-column:2;align-self:center;grid-template-columns:1fr;gap:20px;margin:24px 0}
+ main:has(#gaugeDashboard.single-view) .indicators-heading{flex-wrap:wrap;gap:12px}
+ main:has(#gaugeDashboard.single-view) .dashboard.single-view{grid-template-columns:minmax(0,1fr)}
+}
