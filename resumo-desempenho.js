@@ -12,4 +12,4 @@ fetch('./acompanhamento.json.gz',{cache:'no-store'}).then(async r=>{
  if(!s.n){number.textContent='Ainda não há resultados avaliáveis para estes 30 dias.';context.textContent=fmt(s.pendentes)+' ciclos pendentes de avaliação.';return;}
  number.textContent='Nos últimos 30 dias, o termômetro previu '+fmt(s.previsto*100)+'% de atendimento no prazo. O realizado foi de '+fmt(s.realizado*100)+'%.';
  context.textContent=fmt(Math.round(s.realizado*s.n))+' de '+fmt(s.n)+' ciclos atendidos no prazo; '+fmt(s.previsto*s.n)+' esperados. Entradas de '+date(from)+' a '+date(today)+'. Dados até '+date(data.referencia)+'. Inclui previsões reconstruídas retrospectivamente. '+fmt(s.pendentes)+' pendentes e '+fmt(s.excluidos)+' excluídos ficam fora da comparação.';
-}).catch(()=>{number.textContent='Resumo temporariamente indisponível.';context.textContent='Consulte o detalhamento no painel Previsto × realizado.';});
+}).catch(()=>{number.textContent='Resumo temporariamente indisponível.';context.textContent='Consulte o detalhamento no painel Previsto X Realizado.';});
