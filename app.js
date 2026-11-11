@@ -2,9 +2,29 @@
 const $=id=>document.getElementById(id),names={item_material:'Item de material',item_servico:'Item de serviço',material:'Material',servico:'Serviço',alteracao:'Solicitação de alteração'};
 const num=x=>new Intl.NumberFormat('pt-BR',{maximumFractionDigits:1}).format(x);
 let data;
-function indicator(){const s=data.tipos[$('type').value],p=Math.round(s.probabilidade_no_prazo*100);$('prob').textContent=p+'%';$('late').textContent=(100-p)+'%';$('deadline').textContent=s.prazo+' dias úteis';$('needle').style.transform=`rotate(${p*1.8-90}deg)`;$('gaugeTitle').textContent=`Estimativa experimental: ${p}% no prazo e ${100-p}% de atraso`;$('queue').textContent=s.fila;$('allQueue').textContent=data.total_fila;$('capacity').textContent=num(s.capacidade)+' / dia útil';$('loadDays').textContent=s.dias_carga===null?'Indisponível':num(s.dias_carga);const level=s.dias_carga===null?3:s.dias_carga<=s.prazo/2?0:s.dias_carga<=s.prazo?1:2;$('flag').style.color=['#4e8b76','#ac7c17','#b34e47','#77827b'][level];$('loadLabel').textContent=['Carga baixa','Atenção à carga','Carga elevada','Sem estimativa'][level];$('loadDesc').textContent=['A fila equivale a até metade do prazo de referência, no ritmo recente.','A fila equivale a mais de metade do prazo, no ritmo recente.','A fila supera o prazo de referência, no ritmo recente.','Não há respostas suficientes na janela para calcular a carga.'][level];}
+function indicator(){
+ $('allQueue').textContent=num(data.total_fila);
+ document.querySelectorAll('.gaugecard[data-kind]').forEach(card=>{
+  const kind=card.dataset.kind,s=data.tipos[kind],field=name=>card.querySelector('[data-field="'+name+'"]');
+  if(!s){field('loadLabel').textContent='Dados indisponíveis';return;}
+  const available=Number.isFinite(s.probabilidade_no_prazo),p=available?Math.round(s.probabilidade_no_prazo*100):null;
+  field('prob').textContent=available?p+'%':'—';
+  field('late').textContent=available?(100-p)+'%':'Indisponível';
+  field('deadline').textContent=s.prazo+' dias úteis';
+  field('needle').setAttribute('visibility',available?'visible':'hidden');
+  if(available)field('needle').style.transform='rotate('+(p*1.8-90)+'deg)';
+  card.querySelector('svg').setAttribute('aria-label',names[kind]+(available?': estimativa experimental de '+p+'% no prazo e '+(100-p)+'% de atraso':': probabilidade indisponível'));
+  field('queue').textContent=num(s.fila);
+  field('capacity').textContent=Number.isFinite(s.capacidade)?num(s.capacidade):'Indisponível';
+  field('loadDays').textContent=Number.isFinite(s.dias_carga)?num(s.dias_carga):'Indisponível';
+  const level=!Number.isFinite(s.dias_carga)?3:s.dias_carga<=s.prazo/2?0:s.dias_carga<=s.prazo?1:2;
+  field('loadStatus').dataset.level=level;
+  field('loadLabel').textContent=['Carga baixa','Atenção à carga','Carga elevada','Sem estimativa'][level];
+  field('loadDesc').textContent=['Até metade do prazo de referência, no ritmo recente.','Mais de metade do prazo de referência, no ritmo recente.','Acima do prazo de referência, no ritmo recente.','Sem respostas suficientes para estimar a carga.'][level];
+ });
+}
 function lookup(e){e.preventDefault();let code=$('number').value.trim().replace(/^0+(?=\d)/,'');const rows=data.consulta.filter(r=>r.numero.replace(/^0+(?=\d)/,'')===code);$('answer').replaceChildren();if(!rows.length){$('answer').textContent='Não localizado nesta extração. Confira o número. Rascunhos, demandas recentes ou ainda não sincronizadas podem não aparecer.';return}rows.forEach(r=>{const box=document.createElement('article');box.className='result';let h=document.createElement('h3');h.textContent=`${names[r.tipo]} · ${r.numero}`;box.append(h);let p=document.createElement('p');p.textContent='Situação no cadastro: '+r.situacao;box.append(p);p=document.createElement('p');p.textContent=r.divergencia?'O cadastro e o histórico divergem. A quantidade de demandas anteriores não está disponível com segurança para esta proposta.':r.fila?`${r.anteriores} demandas na fila entraram antes deste ciclo, sendo ${r.anteriores_tipo} do mesmo tipo.`:r.pausado?'Fora da fila enquanto está em edição pelo demandante.':'Este ciclo não está aguardando resposta da equipe.';box.append(p);p=document.createElement('p');const d=r.entrada.slice(0,10).split('-').reverse().join('/');p.textContent=`Ciclo ${r.ciclo} · Entrada em ${d}. Contagem reconstruída pelo histórico; o cadastro pode divergir.`;p.className='small';box.append(p);$('answer').append(box)})}
-fetch('./dados.json.gz').then(async r=>{if(!r.ok)throw Error('Dados indisponíveis');const stream=r.body.pipeThrough(new DecompressionStream('gzip'));return JSON.parse(await new Response(stream).text())}).then(d=>{data=d;const [day,hour]=d.referencia.split('T');$('reference').textContent='Último evento observado: '+day.split('-').reverse().join('/')+' às '+hour.slice(0,5)+' · não é tempo real';indicator();$('type').addEventListener('change',indicator);$('form').addEventListener('submit',lookup)}).catch(()=>{$('reference').textContent='Não foi possível carregar os dados. Recarregue a página.';$('form').addEventListener('submit',e=>e.preventDefault());$('type').disabled=true;});
+fetch('./dados.json.gz').then(async r=>{if(!r.ok)throw Error('Dados indisponíveis');const stream=r.body.pipeThrough(new DecompressionStream('gzip'));return JSON.parse(await new Response(stream).text())}).then(d=>{data=d;const [day,hour]=d.referencia.split('T');$('reference').textContent='Último evento observado: '+day.split('-').reverse().join('/')+' às '+hour.slice(0,5)+' · não é tempo real';indicator();$('form').addEventListener('submit',lookup)}).catch(()=>{$('reference').textContent='Não foi possível carregar os dados. Recarregue a página.';$('form').addEventListener('submit',e=>e.preventDefault());document.querySelectorAll('[data-field="loadLabel"]').forEach(el=>{el.textContent='Dados indisponíveis';});});
 
 let dailyData;
 const svgNode=(name,attrs={},text)=>{const n=document.createElementNS('http://www.w3.org/2000/svg',name);Object.entries(attrs).forEach(([k,v])=>n.setAttribute(k,v));if(text!==undefined)n.textContent=text;return n};
@@ -40,4 +60,4 @@ function dailyCharts(){
  const [d,t]=dailyData.referencia.split('T');$('loadReference').textContent='Histórico até '+d.split('-').reverse().join('/')+' às '+t.slice(0,5)+' · último dia parcial';
  requestAnimationFrame(()=>{$('dailyScroll').scrollLeft=$('dailyScroll').scrollWidth});
 }
-fetch('./carga-diaria.json').then(r=>{if(!r.ok)throw Error();return r.json()}).then(d=>{dailyData=d;dailyCharts();$('loadPeriod').addEventListener('change',dailyCharts)}).catch(()=>{$('loadReference').textContent='Não foi possível carregar o histórico diário.';$('loadPeriod').disabled=true});
+if (!$('carga-historica').hidden) fetch('./carga-diaria.json').then(r=>{if(!r.ok)throw Error();return r.json()}).then(d=>{dailyData=d;dailyCharts();$('loadPeriod').addEventListener('change',dailyCharts)}).catch(()=>{$('loadReference').textContent='Não foi possível carregar o histórico diário.';$('loadPeriod').disabled=true});
