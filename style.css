@@ -71,3 +71,7 @@ article.gaugecard{padding:20px 16px;display:flex;flex-direction:column;min-width
 @media(max-width:799px){.dashboard{grid-template-columns:repeat(2,minmax(0,1fr))}.indicators-heading{align-items:start;flex-direction:column;gap:12px}.totalqueue{max-width:none}.gaugecard .cardhead{min-height:76px}}
 @media(max-width:479px){.dashboard{grid-template-columns:minmax(0,1fr)}.gaugecard .cardhead{min-height:0}.gaugecard h3{font-size:21px}.gaugewrap{max-width:290px}.load-description{min-height:0}.cardload dl>div{font-size:12px}.gaugevalue strong{font-size:46px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}[data-field="needle"]{transition:none}}
+
+
+/* Navigation accommodates monitoring on narrow screens. */
+header{flex-wrap:wrap;gap:16px}nav{flex-wrap:wrap}
