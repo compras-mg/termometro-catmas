@@ -8,8 +8,11 @@ fetch('./acompanhamento.json.gz',{cache:'no-store'}).then(async r=>{
  const d=new Date(today+'T12:00:00Z');d.setUTCDate(d.getUTCDate()-29);const from=d.toISOString().slice(0,10);
  const rows=data.registros.filter(r=>r.entrada.slice(0,10)>=from&&r.entrada.slice(0,10)<=today),s=resumo(rows);
  const date=s=>s.slice(0,10).split('-').reverse().join('/');
- document.getElementById('performance-title').textContent='Atendimento nos últimos 30 dias';
  if(!s.n){number.textContent='Ainda não há resultados avaliáveis para estes 30 dias.';context.textContent=fmt(s.pendentes)+' ciclos pendentes de avaliação.';return;}
- number.textContent='Nos últimos 30 dias, o termômetro previu '+fmt(s.previsto*100)+'% de atendimento no prazo. O realizado foi de '+fmt(s.realizado*100)+'%.';
- context.textContent=fmt(Math.round(s.realizado*s.n))+' de '+fmt(s.n)+' ciclos atendidos no prazo; '+fmt(s.previsto*s.n)+' esperados. Entradas de '+date(from)+' a '+date(today)+'. Dados até '+date(data.referencia)+'. Inclui previsões reconstruídas retrospectivamente. '+fmt(s.pendentes)+' pendentes e '+fmt(s.excluidos)+' excluídos ficam fora da comparação.';
-}).catch(()=>{number.textContent='Resumo temporariamente indisponível.';context.textContent='Consulte o detalhamento no painel Previsto X Realizado.';});
+ for(const [key,value] of [['actual',s.realizado],['expected',s.previsto]]){
+  document.getElementById('performance-'+key).textContent=fmt(value*100)+'%';
+  document.getElementById('performance-'+key+'-bar').style.width=(value*100)+'%';
+ }
+ number.textContent=fmt(Math.round(s.realizado*s.n))+' de '+fmt(s.n)+' ciclos atendidos no prazo nos últimos 30 dias.';
+ context.textContent='Entradas de '+date(from)+' a '+date(today)+'. Dados até '+date(data.referencia)+'. A quantidade estimada é de '+fmt(s.previsto*s.n)+' atendimentos no prazo. Inclui previsões reconstruídas retrospectivamente. '+fmt(s.pendentes)+' pendentes e '+fmt(s.excluidos)+' excluídos ficam fora da comparação. Cada reenvio após uma resposta inicia outro ciclo.';
+}).catch(()=>{number.textContent='Resumo temporariamente indisponível.';context.textContent='Consulte o detalhamento na página de desempenho.';});

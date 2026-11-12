@@ -7,7 +7,7 @@ function row(root,values){const tr=document.createElement('tr');values.forEach(v
 function empty(root,n,message='Nenhum ciclo nesta seleção.'){const tr=row(root,[message]);tr.firstChild.colSpan=n;tr.className='empty-row';}
 const monthLabel=m=>new Intl.DateTimeFormat('pt-BR',{month:'long',year:'numeric',timeZone:'UTC'}).format(new Date(m+'-01T12:00:00Z'));
 const signed=n=>(n>0?'+':'')+fmt(n);
-function summaryRows(id,items,label=k=>k){const root=$(id);root.replaceChildren();items.forEach(([key,s])=>row(root,[label(key),s.n,s.pendentes,s.n?fmt(s.previsto*s.n):'—',s.n?fmt(s.realizado*s.n,0):'—',s.n?signed((s.realizado-s.previsto)*s.n):'—']));if(!items.length)empty(root,6);}
+function summaryRows(id,items,label=k=>k){const root=$(id);root.replaceChildren();items.forEach(([key,s])=>row(root,[label(key),s.n,s.pendentes,pct(s.previsto),pct(s.realizado),s.n?signed((s.realizado-s.previsto)*100):'—']));if(!items.length)empty(root,6);}
 function render(){
  const month=$('evalMonth').value,start=month?month+'-01':'',end=month?month+'-31':'';
  const invalid=!month;$('filterError').textContent='';
@@ -16,10 +16,10 @@ function render(){
  selection=dataset&&!invalid?selecionar(dataset.registros,{origem:origin,tipo:$('evalType').value,inicio:start,fim:end}):[];
  const s=resumo(selection),expected=s.n?s.previsto*s.n:null,actual=s.n?Math.round(s.realizado*s.n):null,gap=s.n?actual-expected:null;
  $('monthTitle').textContent=month?monthLabel(month):'Mês de entrada';
- $('promiseSentence').textContent=s.n?`Em ${fmt(s.n,0)} ciclos avaliados, o termômetro previa ${fmt(expected)} atendimentos no prazo. Realizamos ${fmt(actual,0)} — ${Math.abs(gap)<0.05?'em linha com o previsto':fmt(Math.abs(gap))+(gap>0?' acima':' abaixo')+' do previsto'}.`:'Ainda não há ciclos com resultado definido nesta seleção.';
- $('metricBrier').textContent=fmt(s.brier,4);$('metricExpected').textContent=fmt(expected);$('metricActual').textContent=fmt(actual,0);
- $('expectedRate').textContent=pct(s.previsto)+' dos avaliados';$('actualRate').textContent=pct(s.realizado)+' dos avaliados';
- $('metricGap').textContent=s.n?signed(gap):'—';$('gapRate').textContent=s.n?signed((s.realizado-s.previsto)*100)+' pontos percentuais':'Sem resultados';$('metricCount').textContent=fmt(s.n,0);
+ $('promiseSentence').textContent=s.n?`Atendemos ${pct(s.realizado)} dos ciclos no prazo, com estimativa de ${pct(s.previsto)} pelo modelo. ${Math.abs(gap)<0.05?'Resultado em linha com a estimativa.':'Diferença de '+fmt(Math.abs(s.realizado-s.previsto)*100)+' pontos percentuais '+(gap>0?'acima':'abaixo')+' da estimativa.'}`:'Ainda não há ciclos com resultado definido nesta seleção.';
+ $('metricBrier').textContent=fmt(s.brier,4);$('metricExpected').textContent=pct(s.previsto);$('metricActual').textContent=pct(s.realizado);
+ $('expectedRate').textContent=s.n?fmt(expected)+' atendimentos esperados':'Sem resultados';$('actualRate').textContent=s.n?fmt(actual,0)+' de '+fmt(s.n,0)+' ciclos':'Sem resultados';
+ $('metricGap').textContent=s.n?signed((s.realizado-s.previsto)*100)+' p.p.':'—';$('gapRate').textContent='Pontos percentuais';$('metricCount').textContent=fmt(s.n,0);
  $('metricCoverage').textContent=fmt(s.pendentes,0)+' pendentes · '+fmt(s.excluidos,0)+' excluídos';
  summaryRows('typeRows',grupos(selection,r=>r.tipo),(k)=>names[k]||k);
  summaryRows('monthRows',grupos(dataset?selecionar(dataset.registros,{origem:origin,tipo:$('evalType').value}):[],r=>r.entrada.slice(0,7)).sort((a,b)=>b[0].localeCompare(a[0])),k=>k.slice(5)+'/'+k.slice(0,4));
