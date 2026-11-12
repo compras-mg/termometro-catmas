@@ -38,6 +38,12 @@ p { color: var(--muted); }
 .intro > p { margin: 8px 0 12px; max-width: 72ch; }
 .stamp { display: flex; align-items: baseline; gap: 8px; font-size: 12px; color: var(--muted); }
 .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--slate); flex-shrink: 0; }
+.team-message { margin: 0 0 22px; padding: 16px 20px; border: 1px solid #d4e0e7; border-left: 3px solid var(--slate); border-radius: 6px; background: #eaf0f3; }
+.team-message h2 { margin: 0 0 6px; color: var(--slate); font-size: 15px; font-weight: 600; letter-spacing: 0; text-wrap: wrap; }
+.team-message p { max-width: 110ch; margin: 6px 0; font-size: 14px; line-height: 1.6; }
+.team-message details { padding: 8px 0 0; border: 0; font-size: 13px; }
+.team-message summary { color: var(--slate); }
+.team-message details p { margin-top: 12px; }
 section { min-width: 0; }
 label { display: block; font-size: 13px; font-weight: 600; }
 select, input { display: block; width: 100%; min-height: 46px; margin-top: 6px; padding: 10px 12px; border: 1px solid #87959f; border-radius: 5px; color: var(--ink); background: #fff; font: inherit; }
