@@ -147,13 +147,17 @@ def publish(run,data):
     if json.loads(gzip.decompress(monitoring)) != merged:
         raise ValueError('Compactacao do acompanhamento inconsistente')
     (run/'acompanhamento.json.gz').write_bytes(monitoring)
-    if content==old.read_bytes() and history.exists() and monitoring==history.read_bytes():
-        return {'commit':git('rev-parse','HEAD',cwd=checkout),'alterado':False}
+    write_json(checkout/'atualizacao.json', {
+        'atualizado_em': datetime.now(timezone.utc).isoformat(),
+        'referencia': data['referencia'],
+        'dados_sha256': hashlib.sha256(content).hexdigest(),
+        'ciclo': run.name,
+    })
     old.write_bytes(content)
     history.write_bytes(monitoring)
-    git('add','--','dados.json.gz','acompanhamento.json.gz',cwd=checkout)
+    git('add','--','dados.json.gz','acompanhamento.json.gz','atualizacao.json',cwd=checkout)
     changed=set(git('diff','--cached','--name-only',cwd=checkout).splitlines())
-    if not changed or not changed <= {'dados.json.gz','acompanhamento.json.gz'}:
+    if not changed or not changed <= {'dados.json.gz','acompanhamento.json.gz','atualizacao.json'}:
         raise ValueError('Publicacao fora do escopo')
     git('-c','user.name=Atualizacao CATMAS','-c','user.email=catmas-bot@users.noreply.github.com',
         'commit','-m','Atualiza snapshot CATMAS '+data['referencia'],cwd=checkout)
