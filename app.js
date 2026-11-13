@@ -18,7 +18,28 @@ function indicator(){
  });
 }
 function lookup(e){e.preventDefault();let code=$('number').value.trim().replace(/^0+(?=\d)/,'');const rows=data.consulta.filter(r=>r.numero.replace(/^0+(?=\d)/,'')===code);$('answer').replaceChildren();if(!rows.length){$('answer').textContent='Não localizado nesta extração. Confira o número. Rascunhos, demandas recentes ou ainda não sincronizadas podem não aparecer.';return}rows.forEach(r=>{const box=document.createElement('article');box.className='result';let h=document.createElement('h3');h.textContent=`${names[r.tipo]} · ${r.numero}`;box.append(h);let p=document.createElement('p');p.textContent='Situação no cadastro: '+r.situacao;box.append(p);p=document.createElement('p');p.textContent=r.divergencia?'O cadastro e o histórico divergem. A quantidade de demandas anteriores não está disponível com segurança para esta proposta.':r.fila?`${r.anteriores} demandas na fila entraram antes deste ciclo, sendo ${r.anteriores_tipo} do mesmo tipo.`:r.pausado?'Fora da fila enquanto está em edição pelo demandante.':'Este ciclo não está aguardando resposta da equipe.';box.append(p);p=document.createElement('p');const d=r.entrada.slice(0,10).split('-').reverse().join('/');p.textContent=`Ciclo ${r.ciclo} · Entrada em ${d}.`;p.className='small';box.append(p);$('answer').append(box)})}
-fetch('./dados.json.gz').then(async r=>{if(!r.ok)throw Error('Dados indisponíveis');const stream=r.body.pipeThrough(new DecompressionStream('gzip'));return JSON.parse(await new Response(stream).text())}).then(d=>{data=d;const [day,hour]=d.referencia.split('T');$('reference').textContent='Último evento observado: '+day.split('-').reverse().join('/')+' às '+hour.slice(0,5)+' · não é tempo real';indicator();$('gaugeDashboard').setAttribute('aria-busy','false');$('form').querySelector('button').disabled=false;$('form').addEventListener('submit',lookup)}).catch(()=>{$('reference').textContent='Não foi possível carregar os dados. Recarregue a página.';$('gaugeDashboard').setAttribute('aria-busy','false');$('answer').textContent='Consulta indisponível enquanto os dados não forem carregados.';$('form').addEventListener('submit',e=>e.preventDefault());document.querySelectorAll('[data-field="loadLabel"]').forEach(el=>{el.textContent='Dados indisponíveis';});});
+
+async function showUpdateStamp(snapshot, blob) {
+ try {
+  const response=await fetch('./atualizacao.json',{cache:'no-store'});
+  if(!response.ok) return;
+  const stamp=await response.json();
+  const hash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',blob)),b=>b.toString(16).padStart(2,'0')).join('');
+  if(stamp.dados_sha256!==hash || stamp.referencia!==snapshot.referencia) return;
+  const time=new Date(stamp.atualizado_em);
+  if(!Number.isFinite(time.getTime())) return;
+  const formatted=new Intl.DateTimeFormat('pt-BR',{timeZone:'America/Sao_Paulo',dateStyle:'short',timeStyle:'short'}).format(time);
+  const [day,hour]=snapshot.referencia.split('T');
+  $('reference').textContent='Última atualização: '+formatted+' (horário de Brasília)';
+  const detail=document.createElement('span');
+  detail.style.display='block';
+  detail.textContent='Último evento observado: '+day.split('-').reverse().join('/')+' às '+hour.slice(0,5)+'. Atualizações agendadas para 6h e 12h30, horário de Brasília.';
+  $('reference').append(detail);
+ } catch { /* Preserva a referência real se o comprovante estiver indisponível. */ }
+}
+let snapshotBlob;
+
+fetch('./dados.json.gz',{cache:'no-store'}).then(async r=>{if(!r.ok)throw Error('Dados indisponíveis');snapshotBlob=await r.arrayBuffer();const stream=new Blob([snapshotBlob]).stream().pipeThrough(new DecompressionStream('gzip'));return JSON.parse(await new Response(stream).text())}).then(d=>{data=d;const [day,hour]=d.referencia.split('T');$('reference').textContent='Último evento observado: '+day.split('-').reverse().join('/')+' às '+hour.slice(0,5)+' · não é tempo real';showUpdateStamp(d,snapshotBlob);indicator();$('gaugeDashboard').setAttribute('aria-busy','false');$('form').querySelector('button').disabled=false;$('form').addEventListener('submit',lookup)}).catch(()=>{$('reference').textContent='Não foi possível carregar os dados. Recarregue a página.';$('gaugeDashboard').setAttribute('aria-busy','false');$('answer').textContent='Consulta indisponível enquanto os dados não forem carregados.';$('form').addEventListener('submit',e=>e.preventDefault());document.querySelectorAll('[data-field="loadLabel"]').forEach(el=>{el.textContent='Dados indisponíveis';});});
 
 let dailyData;
 const svgNode=(name,attrs={},text)=>{const n=document.createElementNS('http://www.w3.org/2000/svg',name);Object.entries(attrs).forEach(([k,v])=>n.setAttribute(k,v));if(text!==undefined)n.textContent=text;return n};
