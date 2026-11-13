@@ -8,12 +8,55 @@ function empty(root,n,message='Nenhum ciclo nesta seleção.'){const tr=row(root
 const monthLabel=m=>new Intl.DateTimeFormat('pt-BR',{month:'long',year:'numeric',timeZone:'UTC'}).format(new Date(m+'-01T12:00:00Z'));
 const signed=n=>(n>0?'+':'')+fmt(n);
 function summaryRows(id,items,label=k=>k){const root=$(id);root.replaceChildren();items.forEach(([key,s])=>row(root,[label(key),s.n,s.pendentes,pct(s.previsto),pct(s.realizado),s.n?signed((s.realizado-s.previsto)*100):'—']));if(!items.length)empty(root,6);}
+
+function renderService(month){
+ const all=dataset?selecionar(dataset.registros,{origem:'retrospectiva'}):[];
+ const selected=all.filter(r=>r.entrada.slice(0,7)===month), s=resumo(selected);
+ const on=selected.filter(r=>r.realizado===1).length, late=selected.filter(r=>r.realizado===0).length;
+ $('serviceMonth').textContent=month?'Demandas encaminhadas em '+monthLabel(month):'Resultados do atendimento';
+ $('serviceRate').textContent=pct(s.realizado);
+ $('serviceOnTime').textContent=on+' de '+s.n+' ciclos avaliados';
+ $('serviceLate').textContent=fmt(late,0);
+ $('servicePending').textContent=fmt(s.pendentes,0);
+ $('serviceBase').textContent=fmt(s.total,0)+' ciclos no período';
+ $('serviceNote').textContent=s.excluidos+' ciclos excluídos por retirada ou inconsistências na apuração. O percentual considera '+s.n+' ciclos com resultado definido.';
+ $('serviceTypesPeriod').textContent=month?monthLabel(month)+' · mesmo período do resumo acima':'';
+ const types=$('serviceTypes');types.replaceChildren();
+ for(const [k,v] of grupos(selected,r=>r.tipo)){
+  const a=selected.filter(r=>r.tipo===k&&r.realizado===1).length;
+  const tr=row(types,[names[k]||k,pct(v.realizado),a+' / '+v.n,v.n-a,v.pendentes]);
+  if(v.n<20){const note=document.createElement('small');note.className='result-note';note.textContent='Poucos casos';tr.firstChild.append(note);}
+ }
+ if(!selected.length)empty(types,5);
+ const monthly=grupos(all,r=>r.entrada.slice(0,7)).sort((a,b)=>a[0].localeCompare(b[0]));
+ const rows=$('serviceMonths');rows.replaceChildren();
+ const reference=dataset?.referencia.slice(0,7);
+ for(const [m,v] of [...monthly].reverse())row(rows,[monthLabel(m)+(m===reference?' · parcial':''),pct(v.realizado),v.n,v.pendentes]);
+ const root=$('serviceChart');root.replaceChildren();
+ if(!monthly.length){root.textContent='Sem dados disponíveis.';return;}
+ const ns='http://www.w3.org/2000/svg',svg=document.createElementNS(ns,'svg');
+ svg.setAttribute('viewBox','0 0 960 290');svg.setAttribute('role','img');svg.setAttribute('aria-label','Evolução mensal do percentual respondido no prazo. Valores disponíveis na tabela abaixo.');
+ const add=(tag,attrs,text)=>{const el=document.createElementNS(ns,tag);for(const [k,v] of Object.entries(attrs))el.setAttribute(k,v);if(text!==undefined)el.textContent=text;svg.append(el);return el;};
+ const x=i=>65+i*830/Math.max(1,monthly.length-1),y=v=>225-v*190;
+ for(const value of [0,.25,.5,.75,1]){add('line',{x1:55,x2:910,y1:y(value),y2:y(value),stroke:'#dce2e6','stroke-dasharray':'4 5'});add('text',{x:44,y:y(value)+4,'text-anchor':'end',fill:'#59666e','font-size':12},Math.round(value*100)+'%');}
+ let path='';
+ monthly.forEach(([m,v],i)=>{if(v.realizado===null)return;path+=(path?'L':'M')+x(i)+','+y(v.realizado)+' ';});
+ add('path',{d:path,fill:'none',stroke:'#36745f','stroke-width':3});
+ monthly.forEach(([m,v],i)=>{
+  if(v.realizado!==null){const dot=add('circle',{cx:x(i),cy:y(v.realizado),r:5,fill:m===reference?'#fff':'#36745f',stroke:'#36745f','stroke-width':2});const title=document.createElementNS(ns,'title');title.textContent=monthLabel(m)+': '+pct(v.realizado)+'; '+v.n+' ciclos avaliados'+(m===reference?' · mês parcial':'');dot.append(title);}
+  add('text',{x:x(i),y:252,'text-anchor':'middle',fill:'#59666e','font-size':12},m.slice(5)+'/'+m.slice(2,4));
+  if(m===reference)add('text',{x:x(i),y:272,'text-anchor':'middle',fill:'#59666e','font-size':11},'parcial');
+ });
+ root.append(svg);
+}
+
 function render(){
  const month=$('evalMonth').value,start=month?month+'-01':'',end=month?month+'-31':'';
  const invalid=!month;$('filterError').textContent='';
  const origin=$('evalOrigin').value;
  $('originNote').textContent=origin==='retrospectiva'?'Retrospectiva: previsões calculadas agora com os atributos reconstruídos na entrada. Não são previsões registradas naquele momento. Somente entradas após treino e calibração do modelo.':'Previsões congeladas na primeira publicação sem resultado observado. Podem ter sido registradas depois da entrada; o atraso da extração impede certificar antecedência em relação à resposta real.';
  selection=dataset&&!invalid?selecionar(dataset.registros,{origem:origin,tipo:$('evalType').value,inicio:start,fim:end}):[];
+ renderService(month);
  const s=resumo(selection),expected=s.n?s.previsto*s.n:null,actual=s.n?Math.round(s.realizado*s.n):null,gap=s.n?actual-expected:null;
  $('monthTitle').textContent=month?monthLabel(month):'Mês de entrada';
  $('promiseSentence').textContent=s.n?`Atendemos ${pct(s.realizado)} dos ciclos no prazo, com estimativa de ${pct(s.previsto)} pelo modelo. ${Math.abs(gap)<0.05?'Resultado em linha com a estimativa.':'Diferença de '+fmt(Math.abs(s.realizado-s.previsto)*100)+' pontos percentuais '+(gap>0?'acima':'abaixo')+' da estimativa.'}`:'Ainda não há ciclos com resultado definido nesta seleção.';
@@ -52,7 +95,7 @@ fetch('./acompanhamento.json.gz',{cache:'no-store'}).then(async response=>{
  if(!response.ok)throw Error('Carga indisponível');
  dataset=validar(JSON.parse(await new Response(response.body.pipeThrough(new DecompressionStream('gzip'))).text()));
  const today=new Intl.DateTimeFormat('sv-SE',{timeZone:'America/Sao_Paulo',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
- const last=new Date(today.slice(0,7)+'-01T12:00:00Z');last.setUTCMonth(last.getUTCMonth()-1);const previous=last.toISOString().slice(0,7);
+ const last=new Date(dataset.referencia.slice(0,7)+'-01T12:00:00Z');last.setUTCMonth(last.getUTCMonth()-1);const previous=last.toISOString().slice(0,7);
  const months=[...new Set([previous,...dataset.registros.map(r=>r.entrada.slice(0,7))])].sort().reverse();
  $('evalMonth').replaceChildren(...months.map(m=>{const o=document.createElement('option');o.value=m;o.textContent=monthLabel(m);return o}));$('evalMonth').value=previous;
  $('monitorStatus').textContent='Resultados até '+date(dataset.referencia)+' · '+fmt(dataset.registros.length,0)+' ciclos registrados · fonte não é tempo real.';
