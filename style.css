@@ -224,3 +224,23 @@ th, td { text-align: left; border-bottom: 1px solid var(--line); padding: 12px; 
   html { scroll-behavior: auto; }
   [data-field="needle"] { transition: none; }
 }
+
+/* Quadro único da fila, ao lado da previsão e abaixo dela em telas menores. */
+.indicators-layout { display:grid; grid-template-columns:minmax(0, 1.4fr) minmax(300px, 1fr); gap:24px; align-items:start; }
+.forecast-panel { min-width:0; }
+.indicators-layout .dashboard { grid-template-columns:minmax(0,1fr); }
+.indicators-layout .single-view .gaugecard { display:flex; gap:0; }
+.indicators-layout .single-view .cardhead { margin-bottom:16px; }
+.queue-summary { background:#fff; border:1px solid var(--line); border-radius:8px; padding:24px; }
+.queue-summary h3 { font-size:18px; }
+.queue-total { display:flex; align-items:baseline; gap:12px; margin:16px 0 20px; }
+.queue-total strong { font-size:56px; line-height:1; font-weight:600; color:var(--ink); font-variant-numeric:tabular-nums; }
+.queue-total span { font-size:14px; }
+.queue-summary th, .queue-summary td { padding:12px 0; }
+.queue-summary thead th { font-size:11px; color:var(--muted); font-weight:600; }
+.queue-summary tbody th { font-weight:400; }
+.queue-summary td, .queue-summary thead th:last-child { text-align:right; padding-left:16px; font-variant-numeric:tabular-nums; }
+.queue-summary td { font-weight:600; }
+.queue-summary tbody tr:last-child > * { border-bottom:0; }
+@media (max-width:1000px) { .indicators-layout { grid-template-columns:minmax(0,1fr); } }
+@media (max-width:560px) { .queue-summary { padding:20px; } }

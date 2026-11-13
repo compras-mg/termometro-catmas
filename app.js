@@ -4,22 +4,17 @@ const num=x=>new Intl.NumberFormat('pt-BR',{maximumFractionDigits:1}).format(x);
 let data;
 function indicator(){
  $('allQueue').textContent=num(data.total_fila);
+ document.querySelectorAll('[data-queue-kind]').forEach(cell=>{const s=data.tipos[cell.dataset.queueKind];cell.textContent=s&&Number.isFinite(s.fila)?num(s.fila):'—';});
  document.querySelectorAll('.gaugecard[data-kind]').forEach(card=>{
   const kind=card.dataset.kind,s=data.tipos[kind],field=name=>card.querySelector('[data-field="'+name+'"]');
-  if(!s){field('loadLabel').textContent='Dados indisponíveis';return;}
+  if(!s){return;}
   const available=Number.isFinite(s.probabilidade_no_prazo),p=available?Math.round(s.probabilidade_no_prazo*100):null;
   field('prob').textContent=available?p+'%':'—';
   field('deadline').textContent=s.prazo+' dias úteis';
   field('needle').setAttribute('visibility',available?'visible':'hidden');
   if(available)field('needle').style.transform='rotate('+(p*1.8-90)+'deg)';
   card.querySelector('svg').setAttribute('aria-label',names[kind]+(available?': estimativa experimental de '+p+'% de resposta em até '+s.prazo+' dias úteis':': probabilidade indisponível'));
-  field('queue').textContent=num(s.fila);
-  field('capacity').textContent=Number.isFinite(s.capacidade)?num(s.capacidade):'Indisponível';
-  field('loadDays').textContent=Number.isFinite(s.dias_carga)?num(s.dias_carga):'Indisponível';
-  const level=!Number.isFinite(s.dias_carga)?3:s.dias_carga<=s.prazo/2?0:s.dias_carga<=s.prazo?1:2;
-  field('loadStatus').dataset.level=level;
-  field('loadLabel').textContent=['Carga baixa','Atenção à carga','Carga elevada','Sem estimativa'][level];
-  field('loadDesc').textContent=['Até metade do prazo de referência, no ritmo recente.','Mais de metade do prazo de referência, no ritmo recente.','Acima do prazo de referência, no ritmo recente.','Sem respostas suficientes para estimar a carga.'][level];
+
  });
 }
 function lookup(e){e.preventDefault();let code=$('number').value.trim().replace(/^0+(?=\d)/,'');const rows=data.consulta.filter(r=>r.numero.replace(/^0+(?=\d)/,'')===code);$('answer').replaceChildren();if(!rows.length){$('answer').textContent='Não localizado nesta extração. Confira o número. Rascunhos, demandas recentes ou ainda não sincronizadas podem não aparecer.';return}rows.forEach(r=>{const box=document.createElement('article');box.className='result';let h=document.createElement('h3');h.textContent=`${names[r.tipo]} · ${r.numero}`;box.append(h);let p=document.createElement('p');p.textContent='Situação no cadastro: '+r.situacao;box.append(p);p=document.createElement('p');p.textContent=r.divergencia?'O cadastro e o histórico divergem. A quantidade de demandas anteriores não está disponível com segurança para esta proposta.':r.fila?`${r.anteriores} demandas na fila entraram antes deste ciclo, sendo ${r.anteriores_tipo} do mesmo tipo.`:r.pausado?'Fora da fila enquanto está em edição pelo demandante.':'Este ciclo não está aguardando resposta da equipe.';box.append(p);p=document.createElement('p');const d=r.entrada.slice(0,10).split('-').reverse().join('/');p.textContent=`Ciclo ${r.ciclo} · Entrada em ${d}. Contagem reconstruída pelo histórico; o cadastro pode divergir.`;p.className='small';box.append(p);$('answer').append(box)})}

@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20261112-mensagem-1">
+  <link rel="stylesheet" href="style.css?v=20261113-fila-1">
   <link rel="stylesheet" href="tema-catmas.css?v=20261112-layout-1">
 </head>
 <body>
@@ -36,7 +36,8 @@
   </section>
 
   <section class="indicators" id="indicadores" aria-labelledby="indicators-title">
-    <div class="section-heading"><div><div class="eyebrow">SITUAÇÃO ATUAL</div><h2 id="indicators-title">Expectativa para novas demandas</h2></div><p class="totalqueue"><strong id="allQueue">—</strong><span>demandas aguardando<br> resposta no total</span></p></div>
+    <div class="section-heading"><div><div class="eyebrow">SITUAÇÃO ATUAL</div><h2 id="indicators-title">Expectativa para novas demandas</h2></div></div>
+    <div class="indicators-layout"><div class="forecast-panel">
     <div class="view-controls"><label id="kindChoice" for="gaugeKind">Tipo de demanda<select id="gaugeKind"><option value="item_material">Item de material</option><option value="item_servico">Item de serviço</option><option value="material">Material</option><option value="servico">Serviço</option><option value="alteracao">Solicitação de alteração</option></select></label><label class="show-all-control"><input type="checkbox" id="showAll" role="switch" aria-controls="gaugeDashboard"><span>Comparar todos os tipos</span></label></div>
     <div class="dashboard single-view" id="gaugeDashboard" aria-busy="true">
       <article class="gaugecard" data-kind="item_material" aria-labelledby="title-item_material">
@@ -47,11 +48,7 @@
             <div class="gaugevalue"><span>Chance estimada de resposta</span><strong data-field="prob">—</strong><span class="deadline-context">em até <b data-field="deadline">—</b></span></div>
           </div>
         </div>
-        <div class="cardload">
-          <div class="loadheading"><h4>Fila e ritmo de atendimento</h4><div class="loadstatus" data-field="loadStatus"><span aria-hidden="true">●</span><strong data-field="loadLabel">Carregando…</strong></div></div>
-          <p class="load-description" data-field="loadDesc"></p>
-          <dl><div><dt>Aguardando resposta</dt><dd data-field="queue">—</dd></div><div><dt>Respostas por dia útil</dt><dd data-field="capacity">—</dd></div><div><dt>Dias de carga da fila</dt><dd data-field="loadDays">—</dd></div></dl>
-        </div>
+
       </article>
       <article class="gaugecard" data-kind="item_servico" aria-labelledby="title-item_servico" hidden>
         <div class="cardhead"><h3 id="title-item_servico">Item de serviço</h3><span class="card-kicker">Nova demanda</span></div>
@@ -61,11 +58,7 @@
             <div class="gaugevalue"><span>Chance estimada de resposta</span><strong data-field="prob">—</strong><span class="deadline-context">em até <b data-field="deadline">—</b></span></div>
           </div>
         </div>
-        <div class="cardload">
-          <div class="loadheading"><h4>Fila e ritmo de atendimento</h4><div class="loadstatus" data-field="loadStatus"><span aria-hidden="true">●</span><strong data-field="loadLabel">Carregando…</strong></div></div>
-          <p class="load-description" data-field="loadDesc"></p>
-          <dl><div><dt>Aguardando resposta</dt><dd data-field="queue">—</dd></div><div><dt>Respostas por dia útil</dt><dd data-field="capacity">—</dd></div><div><dt>Dias de carga da fila</dt><dd data-field="loadDays">—</dd></div></dl>
-        </div>
+
       </article>
       <article class="gaugecard" data-kind="material" aria-labelledby="title-material" hidden>
         <div class="cardhead"><h3 id="title-material">Material</h3><span class="card-kicker">Nova demanda</span></div>
@@ -75,11 +68,7 @@
             <div class="gaugevalue"><span>Chance estimada de resposta</span><strong data-field="prob">—</strong><span class="deadline-context">em até <b data-field="deadline">—</b></span></div>
           </div>
         </div>
-        <div class="cardload">
-          <div class="loadheading"><h4>Fila e ritmo de atendimento</h4><div class="loadstatus" data-field="loadStatus"><span aria-hidden="true">●</span><strong data-field="loadLabel">Carregando…</strong></div></div>
-          <p class="load-description" data-field="loadDesc"></p>
-          <dl><div><dt>Aguardando resposta</dt><dd data-field="queue">—</dd></div><div><dt>Respostas por dia útil</dt><dd data-field="capacity">—</dd></div><div><dt>Dias de carga da fila</dt><dd data-field="loadDays">—</dd></div></dl>
-        </div>
+
       </article>
       <article class="gaugecard" data-kind="servico" aria-labelledby="title-servico" hidden>
         <div class="cardhead"><h3 id="title-servico">Serviço</h3><span class="card-kicker">Nova demanda</span></div>
@@ -89,11 +78,7 @@
             <div class="gaugevalue"><span>Chance estimada de resposta</span><strong data-field="prob">—</strong><span class="deadline-context">em até <b data-field="deadline">—</b></span></div>
           </div>
         </div>
-        <div class="cardload">
-          <div class="loadheading"><h4>Fila e ritmo de atendimento</h4><div class="loadstatus" data-field="loadStatus"><span aria-hidden="true">●</span><strong data-field="loadLabel">Carregando…</strong></div></div>
-          <p class="load-description" data-field="loadDesc"></p>
-          <dl><div><dt>Aguardando resposta</dt><dd data-field="queue">—</dd></div><div><dt>Respostas por dia útil</dt><dd data-field="capacity">—</dd></div><div><dt>Dias de carga da fila</dt><dd data-field="loadDays">—</dd></div></dl>
-        </div>
+
       </article>
       <article class="gaugecard" data-kind="alteracao" aria-labelledby="title-alteracao" hidden>
         <div class="cardhead"><h3 id="title-alteracao">Solicitação de alteração</h3><span class="card-kicker">Nova demanda</span></div>
@@ -103,13 +88,10 @@
             <div class="gaugevalue"><span>Chance estimada de resposta</span><strong data-field="prob">—</strong><span class="deadline-context">em até <b data-field="deadline">—</b></span></div>
           </div>
         </div>
-        <div class="cardload">
-          <div class="loadheading"><h4>Fila e ritmo de atendimento</h4><div class="loadstatus" data-field="loadStatus"><span aria-hidden="true">●</span><strong data-field="loadLabel">Carregando…</strong></div></div>
-          <p class="load-description" data-field="loadDesc"></p>
-          <dl><div><dt>Aguardando resposta</dt><dd data-field="queue">—</dd></div><div><dt>Respostas por dia útil</dt><dd data-field="capacity">—</dd></div><div><dt>Dias de carga da fila</dt><dd data-field="loadDays">—</dd></div></dl>
-        </div>
+
       </article>
     </div>
+    </div><aside class="queue-summary" aria-labelledby="queue-title"><h3 id="queue-title">Demandas aguardando resposta</h3><p class="queue-total"><strong id="allQueue">—</strong><span>no total</span></p><table><thead><tr><th scope="col">Tipo de demanda</th><th scope="col">Quantidade</th></tr></thead><tbody><tr><th scope="row">Item de material</th><td data-queue-kind="item_material">—</td></tr><tr><th scope="row">Item de serviço</th><td data-queue-kind="item_servico">—</td></tr><tr><th scope="row">Material</th><td data-queue-kind="material">—</td></tr><tr><th scope="row">Serviço</th><td data-queue-kind="servico">—</td></tr><tr><th scope="row">Solicitação de alteração</th><td data-queue-kind="alteracao">—</td></tr></tbody></table></aside></div>
     <p class="indicator-note">Estimativa experimental para uma nova entrada na data de referência, sem garantia de prazo. <a href="#metodo">Entenda os indicadores</a>.</p>
   </section>
 
@@ -127,7 +109,7 @@
   <section class="method" id="metodo" aria-labelledby="method-title">
     <div class="eyebrow">METODOLOGIA E TRANSPARÊNCIA</div><h2 id="method-title">Como interpretar o painel</h2>
     <p class="lead">As estimativas ajudam a planejar os encaminhamentos. Os prazos de referência são operacionais e não representam prazos legais.</p>
-    <details><summary>Como ler a estimativa e a carga da fila</summary><p>A chance de resposta se refere a uma nova demanda do tipo selecionado. Não é uma previsão individual para uma proposta que já está na fila.</p><p>A carga mostra quantos dias de trabalho a fila representa, no ritmo recente. Inclui demandas em análise e exclui períodos com o demandante. A fila é reconstruída pelo histórico e pode divergir do cadastro atual. As faixas de carga são provisórias e não representam probabilidades.</p></details>
+    <details><summary>Como ler a estimativa e a fila</summary><p>A chance de resposta se refere a uma nova demanda do tipo selecionado. Não é uma previsão individual para uma proposta que já está na fila.</p><p>A carga mostra quantos dias de trabalho a fila representa, no ritmo recente. Inclui demandas em análise e exclui períodos com o demandante. A fila é reconstruída pelo histórico e pode divergir do cadastro atual. As faixas de carga são provisórias e não representam probabilidades. Os detalhes do cálculo estão na explicação abaixo; a tabela principal apresenta apenas o total e a quantidade por tipo.</p></details>
     <details><summary>Prazos, ciclos e cálculo dos indicadores</summary><p>Cada envio para análise inicia um ciclo. O tempo com o demandante fica fora da contagem da equipe.</p><div class="methodgrid"><article><span>01</span><h3>O que conta como resposta</h3><p>Aprovação, reprovação e devolução para correção encerram o ciclo. Reenviar após uma correção inicia outro ciclo. Gerar o código depois da aprovação não é uma segunda resposta.</p></article><article><span>02</span><h3>O relógio do atendimento</h3><p>Itens e alterações: 3 dias úteis. Materiais e serviços: 5. O dia inicial é excluído. Edições suspendem o relógio e a presença na fila, preservando o tempo anterior. A associação do código 3 à edição ainda aguarda validação.</p></article><article><span>03</span><h3>O que alimenta a previsão</h3><p>Tipo, fila total e do tipo, entradas e respostas nos 7 e 28 dias anteriores e capacidade recente. Nenhuma resposta futura é usada como informação de chegada. O velocímetro mostra uma estimativa experimental para uma nova demanda.</p></article><article><span>04</span><h3>Como lemos a bandeira</h3><p>Dias de carga = fila do tipo ÷ respostas por dia útil nos últimos 28 dias corridos. Verde: até metade do prazo; amarelo: até o prazo; vermelho: acima do prazo. Sem capacidade observada, o indicador fica indisponível. Esses limites são provisórios e não representam probabilidade.</p></article></div></details>
 <details><summary>Calendário de dias úteis</summary><p>Excluímos fins de semana, feriados nacionais (20/11 somente desde 2024), 15/08 e 08/12 em Belo Horizonte, Paixão e Corpus Christi, Carnaval de segunda a quarta, 24 e 31/12. Feriados na terça emendam segunda; na quinta, sexta. O Dia do Servidor vai para a segunda ou sexta mais próxima de 28/10; em empate, sexta. São regras operacionais acordadas, não a reconstrução de todos os atos anuais de expediente.</p><p>Pausas intradiárias são descontadas proporcionalmente ao dia útil de calendário, sem supor jornada de trabalho. Respostas após o vencimento permanecem atrasadas em dias não úteis.</p></details>
 <details><summary>Validação, desempenho e limitações</summary><p>Treinamento final: 2023 a junho/2025. Calibração: julho a dezembro/2025. Teste: 6.664 ciclos de janeiro a setembro/2026. Erro Brier: 0,06664 no modelo, 0,06606 na média por tipo e 0,07230 na média geral (menor é melhor). O modelo não demonstrou ganho sobre a média por tipo e a precisão varia entre grupos.</p><p>Retiradas e casos sem resultado conhecido foram separados. Demanda e capacidade mudam ao longo do tempo. Há poucos exemplos de alguns tipos. A fila é reconstruída pelo histórico e pode divergir do cadastro atual. Demandas anteriores não representam posição garantida, pois prioridades e especialidades não foram mapeadas.</p></details>
@@ -137,7 +119,7 @@
 </main>
 <footer><div class="footer-inner"><strong>CATMAS · Compras MG</strong><span>Planejar com informação. Acompanhar com transparência.</span></div></footer>
 <noscript><p class="noscript-note">Ative o JavaScript para carregar os indicadores e consultar sua proposta. A metodologia permanece disponível nesta página.</p></noscript>
-<script src="app.js?v=20261112-layout-1"></script>
+<script src="app.js?v=20261113-fila-1"></script>
 <script type="module" src="resumo-desempenho.js?v=20261112-layout-1"></script>
 <script src="visualizacao.js?v=2"></script>
 </body>
