@@ -41,7 +41,7 @@
     <div class="view-controls"><label id="kindChoice" for="gaugeKind">Tipo de demanda<select id="gaugeKind"><option value="item_material">Item de material</option><option value="item_servico">Item de serviço</option><option value="material">Material</option><option value="servico">Serviço</option><option value="alteracao">Solicitação de alteração</option></select></label><label class="show-all-control"><input type="checkbox" id="showAll" role="switch" aria-controls="gaugeDashboard"><span>Comparar todos os tipos</span></label></div>
     <div class="dashboard single-view" id="gaugeDashboard" aria-busy="true">
       <article class="gaugecard" data-kind="item_material" aria-labelledby="title-item_material">
-        <div class="cardhead"><h3 id="title-item_material">Item de material</h3><span class="card-kicker">Nova demanda</span></div>
+        <div class="cardhead"><h3 id="title-item_material">Item de material</h3></div>
         <div class="forecast">
           <div class="forecast-main">
             <div class="gaugewrap"><svg viewBox="0 0 500 290" role="img" aria-label="Item de material: aguardando dados"><path d="M60 230 A190 190 0 0 1 440 230" fill="none" stroke="#e7ece9" stroke-width="25"/><path d="M60 230 A190 190 0 0 1 155 65.45" fill="none" stroke="#c95c55" stroke-width="25"/><path d="M155 65.45 A190 190 0 0 1 345 65.45" fill="none" stroke="#dfb256" stroke-width="25"/><path d="M345 65.45 A190 190 0 0 1 440 230" fill="none" stroke="#4e8b76" stroke-width="25"/><g data-field="needle" visibility="hidden" style="transform-origin:250px 230px"><path d="M245 230 L250 71 L255 230Z" fill="#193d37"/><circle cx="250" cy="230" r="11" fill="#193d37"/></g><text x="52" y="266" class="tick">0%</text><text x="425" y="266" class="tick">100%</text></svg></div>
@@ -51,7 +51,7 @@
 
       </article>
       <article class="gaugecard" data-kind="item_servico" aria-labelledby="title-item_servico" hidden>
-        <div class="cardhead"><h3 id="title-item_servico">Item de serviço</h3><span class="card-kicker">Nova demanda</span></div>
+        <div class="cardhead"><h3 id="title-item_servico">Item de serviço</h3></div>
         <div class="forecast">
           <div class="forecast-main">
             <div class="gaugewrap"><svg viewBox="0 0 500 290" role="img" aria-label="Item de serviço: aguardando dados"><path d="M60 230 A190 190 0 0 1 440 230" fill="none" stroke="#e7ece9" stroke-width="25"/><path d="M60 230 A190 190 0 0 1 155 65.45" fill="none" stroke="#c95c55" stroke-width="25"/><path d="M155 65.45 A190 190 0 0 1 345 65.45" fill="none" stroke="#dfb256" stroke-width="25"/><path d="M345 65.45 A190 190 0 0 1 440 230" fill="none" stroke="#4e8b76" stroke-width="25"/><g data-field="needle" visibility="hidden" style="transform-origin:250px 230px"><path d="M245 230 L250 71 L255 230Z" fill="#193d37"/><circle cx="250" cy="230" r="11" fill="#193d37"/></g><text x="52" y="266" class="tick">0%</text><text x="425" y="266" class="tick">100%</text></svg></div>
@@ -61,7 +61,7 @@
 
       </article>
       <article class="gaugecard" data-kind="material" aria-labelledby="title-material" hidden>
-        <div class="cardhead"><h3 id="title-material">Material</h3><span class="card-kicker">Nova demanda</span></div>
+        <div class="cardhead"><h3 id="title-material">Material</h3></div>
         <div class="forecast">
           <div class="forecast-main">
             <div class="gaugewrap"><svg viewBox="0 0 500 290" role="img" aria-label="Material: aguardando dados"><path d="M60 230 A190 190 0 0 1 440 230" fill="none" stroke="#e7ece9" stroke-width="25"/><path d="M60 230 A190 190 0 0 1 155 65.45" fill="none" stroke="#c95c55" stroke-width="25"/><path d="M155 65.45 A190 190 0 0 1 345 65.45" fill="none" stroke="#dfb256" stroke-width="25"/><path d="M345 65.45 A190 190 0 0 1 440 230" fill="none" stroke="#4e8b76" stroke-width="25"/><g data-field="needle" visibility="hidden" style="transform-origin:250px 230px"><path d="M245 230 L250 71 L255 230Z" fill="#193d37"/><circle cx="250" cy="230" r="11" fill="#193d37"/></g><text x="52" y="266" class="tick">0%</text><text x="425" y="266" class="tick">100%</text></svg></div>
@@ -71,7 +71,7 @@
 
       </article>
       <article class="gaugecard" data-kind="servico" aria-labelledby="title-servico" hidden>
-        <div class="cardhead"><h3 id="title-servico">Serviço</h3><span class="card-kicker">Nova demanda</span></div>
+        <div class="cardhead"><h3 id="title-servico">Serviço</h3></div>
         <div class="forecast">
           <div class="forecast-main">
             <div class="gaugewrap"><svg viewBox="0 0 500 290" role="img" aria-label="Serviço: aguardando dados"><path d="M60 230 A190 190 0 0 1 440 230" fill="none" stroke="#e7ece9" stroke-width="25"/><path d="M60 230 A190 190 0 0 1 155 65.45" fill="none" stroke="#c95c55" stroke-width="25"/><path d="M155 65.45 A190 190 0 0 1 345 65.45" fill="none" stroke="#dfb256" stroke-width="25"/><path d="M345 65.45 A190 190 0 0 1 440 230" fill="none" stroke="#4e8b76" stroke-width="25"/><g data-field="needle" visibility="hidden" style="transform-origin:250px 230px"><path d="M245 230 L250 71 L255 230Z" fill="#193d37"/><circle cx="250" cy="230" r="11" fill="#193d37"/></g><text x="52" y="266" class="tick">0%</text><text x="425" y="266" class="tick">100%</text></svg></div>
@@ -81,7 +81,7 @@
 
       </article>
       <article class="gaugecard" data-kind="alteracao" aria-labelledby="title-alteracao" hidden>
-        <div class="cardhead"><h3 id="title-alteracao">Solicitação de alteração</h3><span class="card-kicker">Nova demanda</span></div>
+        <div class="cardhead"><h3 id="title-alteracao">Solicitação de alteração</h3></div>
         <div class="forecast">
           <div class="forecast-main">
             <div class="gaugewrap"><svg viewBox="0 0 500 290" role="img" aria-label="Solicitação de alteração: aguardando dados"><path d="M60 230 A190 190 0 0 1 440 230" fill="none" stroke="#e7ece9" stroke-width="25"/><path d="M60 230 A190 190 0 0 1 155 65.45" fill="none" stroke="#c95c55" stroke-width="25"/><path d="M155 65.45 A190 190 0 0 1 345 65.45" fill="none" stroke="#dfb256" stroke-width="25"/><path d="M345 65.45 A190 190 0 0 1 440 230" fill="none" stroke="#4e8b76" stroke-width="25"/><g data-field="needle" visibility="hidden" style="transform-origin:250px 230px"><path d="M245 230 L250 71 L255 230Z" fill="#193d37"/><circle cx="250" cy="230" r="11" fill="#193d37"/></g><text x="52" y="266" class="tick">0%</text><text x="425" y="266" class="tick">100%</text></svg></div>
