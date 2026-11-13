@@ -225,22 +225,48 @@ th, td { text-align: left; border-bottom: 1px solid var(--line); padding: 12px; 
   [data-field="needle"] { transition: none; }
 }
 
-/* Quadro único da fila, ao lado da previsão e abaixo dela em telas menores. */
-.indicators-layout { display:grid; grid-template-columns:minmax(0, 1.4fr) minmax(300px, 1fr); gap:24px; align-items:start; }
-.forecast-panel { min-width:0; }
-.indicators-layout .dashboard { grid-template-columns:minmax(0,1fr); }
-.indicators-layout .single-view .gaugecard { display:flex; gap:0; }
-.indicators-layout .single-view .cardhead { margin-bottom:16px; }
-.queue-summary { background:#fff; border:1px solid var(--line); border-radius:8px; padding:24px; }
+/* Previsão e fila compartilham alinhamento, margens e altura. */
+.indicators-layout { display:grid; grid-template-columns:minmax(0,1.3fr) minmax(320px,1fr); gap:24px; align-items:stretch; }
+.forecast-panel { min-width:0; display:flex; flex-direction:column; padding:24px 28px; background:#fff; border:1px solid var(--line); border-radius:8px; }
+.forecast-panel .view-controls { margin:0; padding-bottom:20px; border-bottom:1px solid var(--line); gap:12px 20px; align-items:end; }
+.forecast-panel #kindChoice { width:230px; flex:1 1 200px; }
+.forecast-panel .show-all-control { font-size:12px; }
+.indicators-layout .dashboard.single-view { flex:1; display:flex; flex-direction:column; }
+.indicators-layout .single-view .gaugecard { flex:1; display:flex; flex-direction:column; padding:24px 0 4px; border:0; background:transparent; }
+.indicators-layout .single-view .cardhead { margin-bottom:20px; min-height:0; }
+.indicators-layout .single-view .forecast { flex:1; display:flex; align-items:center; justify-content:center; padding:8px 0 20px; }
+.indicators-layout .single-view .forecast-main { width:100%; justify-content:center; gap:24px; }
+.indicators-layout .single-view .gaugewrap { flex:0 1 210px; min-width:110px; }
+.indicators-layout .single-view .gaugevalue > strong { font-size:56px; }
+.queue-summary { min-width:0; background:#fff; border:1px solid var(--line); border-radius:8px; padding:24px 28px; }
 .queue-summary h3 { font-size:18px; }
-.queue-total { display:flex; align-items:baseline; gap:12px; margin:16px 0 20px; }
+.queue-total { display:flex; align-items:baseline; gap:12px; margin:20px 0 24px; }
 .queue-total strong { font-size:56px; line-height:1; font-weight:600; color:var(--ink); font-variant-numeric:tabular-nums; }
 .queue-total span { font-size:14px; }
-.queue-summary th, .queue-summary td { padding:12px 0; }
+.queue-summary table { table-layout:fixed; }
+.queue-summary th, .queue-summary td { padding:11px 0; }
 .queue-summary thead th { font-size:11px; color:var(--muted); font-weight:600; }
+.queue-summary thead th:last-child { width:90px; }
 .queue-summary tbody th { font-weight:400; }
-.queue-summary td, .queue-summary thead th:last-child { text-align:right; padding-left:16px; font-variant-numeric:tabular-nums; }
+.queue-summary td, .queue-summary thead th:last-child { text-align:right; padding-left:12px; font-variant-numeric:tabular-nums; }
 .queue-summary td { font-weight:600; }
 .queue-summary tbody tr:last-child > * { border-bottom:0; }
-@media (max-width:1000px) { .indicators-layout { grid-template-columns:minmax(0,1fr); } }
-@media (max-width:560px) { .queue-summary { padding:20px; } }
+.indicators-layout:has(#showAll:checked) { grid-template-columns:minmax(0,1fr); }
+.forecast-panel:has(#showAll:checked) .dashboard { grid-template-columns:repeat(3,minmax(0,1fr)); margin-top:20px; }
+.forecast-panel:has(#showAll:checked) .gaugecard { padding:16px; }
+@media (max-width:1000px) {
+ .indicators-layout { grid-template-columns:minmax(0,1fr); }
+ .indicators-layout .single-view .forecast { padding:16px 0; }
+ .forecast-panel:has(#showAll:checked) .dashboard { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+@media (max-width:560px) {
+ .forecast-panel, .queue-summary { padding:20px; }
+ .forecast-panel .view-controls { gap:8px; padding-bottom:16px; }
+ .forecast-panel #kindChoice { flex-basis:100%; width:100%; }
+ .indicators-layout .single-view .cardhead { margin-bottom:8px; }
+ .indicators-layout .single-view .forecast-main { gap:16px; }
+ .indicators-layout .single-view .gaugewrap { flex-basis:130px; min-width:80px; }
+ .indicators-layout .single-view .gaugevalue > strong { font-size:42px; }
+ .forecast-panel:has(#showAll:checked) .dashboard { grid-template-columns:minmax(0,1fr); }
+ .queue-total { margin:16px 0 20px; }
+}
